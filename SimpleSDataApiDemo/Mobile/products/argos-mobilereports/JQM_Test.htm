@@ -1,0 +1,128 @@
+﻿
+<!DOCTYPE html> 
+<html> 
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Service Charger</title> 
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>  
+    <script src="//borismoore.github.com/jsrender/jsrender.js"></script>
+    <!-- <script type="text/javascript" src="./jsrender.js"></script> -->
+	
+    <style type="text/css">.flowcontrol{ text-align:right;}</style>
+</head> 
+
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<h1>Service Charger</h1>
+	</div>
+
+	<div data-role="content">	
+		<form class="flickerForm" action="" method="post">
+        	<p>
+        	<label for="q">What would you like to see from Flickr?</label>
+            <input type="text" class="flickrQuery" name="q"/>
+            </p>
+            
+            <p class="flowcontrol">
+            <input data-inline="true" type="submit" value="Go"/>
+            </p>
+           <!-- <p><a href="http://roughlybrilliant.com"><img src="/images/LogoHorizontal.png" alt="Roughly Brilliant Digital Studios" width="278" border="0"></a></p> -->
+        </form>
+	</div>
+	
+	<div data-role="footer">
+		<h4>A <a href="roughlybrilliant.com">Roughly Brilliant</a> Example</h4>
+	</div>
+	
+</div>
+<script>
+    $("div").live("pageinit", function () {
+        var $page = $(this);
+        $page.find("form.flickerForm").submit(createDynamicPage);
+    });
+
+    function createDynamicPage(event) {
+        var query = $(event.target).find("input.flickrQuery").val();
+        $.getJSON("http://localhost:1698/sdata/-/-/-/Customer",
+/*
+        {
+            tags: query,
+            tagmode: "any",
+            format: "json"
+        },
+*/
+        function (data) {
+            data.originalQuery = query;
+            //data.items = data.$resources;
+            data.title = "Clients";
+
+            //remove any characters from the query that might be unsafe to use as an ID for a page
+            data.pageId = query.replace(/[^\w]/, "");
+
+            //Feed the data to the tempalte and add the new page to the body.
+            $(document.body).append($("#flickrTemplate").render(data));
+
+            //Grab a reference to that shiney new page
+            var newpage = $("#" + data.pageId);
+
+            //This line will cause your new page to be deleted from the DOM once you've navigated away.
+            //newpage.attr( "data-" + $.mobile.ns + "external-page", true ).one( 'pagecreate', $.mobile._bindPageRemove );
+
+            //$.mobile.changePage("#" + data.pageId); // Use this to transition and leave a hash page in history
+            $.mobile.changePage(newpage);  //Use this to transition to the new page without making any mark in the history
+        });
+        event.stopPropagation();
+        event.preventDefault();
+        return false;
+    }
+  </script>
+<script id="flickrTemplate" type="text/x-jquery-tmpl"> 
+<div data-role="page" id="{{:pageId}}">
+
+	<div data-role="header">
+		<a data-icon="arrow-l" href="#" data-rel="back">Back</a>
+		<h1>{{:title}}</h1>
+	</div>
+
+	<div data-role="content">	
+	
+	
+		<form class="flickerForm" action="" method="post">
+			<ul data-role="listview">
+			{{for $resources}}
+				<li><a target="flickr" href="{{:$url}}">
+						<h3>{{:customername}}</h3>
+						<p>Phone: {{:telephoneno}}</p>
+					</a>
+				</li>
+			{{/for}}
+			</ul>
+
+        	<p>
+        	<label for="q">Wanna search for something else?</label>
+            <input type="text" class="flickrQuery" name="q"/>
+            </p>
+            
+            <p class="flowcontrol">
+            <input data-inline="true" type="submit" value="Go"/>
+            </p>
+            <p><img src="/images/LogoHorizontal.png" width="278" alt="Roughly Brilliant Digital Studios"></p>
+        </form>
+	</div>
+	
+	<div data-role="footer">
+		<h4>A <a href="roughlybrilliant.com">Roughly Brilliant</a> Example</h4>
+	</div>
+	
+</div>
+</script>
+
+</body>
+</html>
