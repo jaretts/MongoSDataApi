@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoSDataApi", "SimpleSDataApiDemo\MongoSDataApi.csproj", "{08A9FD20-0B6C-43B1-AAEB-1329CCC0F764}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sage.SDataHandler", "Sage.SDataHandler\Sage.SDataHandler.csproj", "{EDC5114D-CE1C-4043-81ED-80CDB9D2149F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoRepository", "MongoRepository\MongoRepository.csproj", "{6BFBBA68-A850-4C2A-89FD-27F4FF099BFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileModel", "MobileModel\MobileModel.csproj", "{69B0010F-7BED-4993-971F-2A47E6E91FA6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{08A9FD20-0B6C-43B1-AAEB-1329CCC0F764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A9FD20-0B6C-43B1-AAEB-1329CCC0F764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A9FD20-0B6C-43B1-AAEB-1329CCC0F764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A9FD20-0B6C-43B1-AAEB-1329CCC0F764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC5114D-CE1C-4043-81ED-80CDB9D2149F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC5114D-CE1C-4043-81ED-80CDB9D2149F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC5114D-CE1C-4043-81ED-80CDB9D2149F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC5114D-CE1C-4043-81ED-80CDB9D2149F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BFBBA68-A850-4C2A-89FD-27F4FF099BFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BFBBA68-A850-4C2A-89FD-27F4FF099BFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BFBBA68-A850-4C2A-89FD-27F4FF099BFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BFBBA68-A850-4C2A-89FD-27F4FF099BFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69B0010F-7BED-4993-971F-2A47E6E91FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69B0010F-7BED-4993-971F-2A47E6E91FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69B0010F-7BED-4993-971F-2A47E6E91FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69B0010F-7BED-4993-971F-2A47E6E91FA6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+	EndGlobalSection
+EndGlobal
