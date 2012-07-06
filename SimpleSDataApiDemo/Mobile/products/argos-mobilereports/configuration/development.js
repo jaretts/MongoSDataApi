@@ -8,7 +8,7 @@ define('configuration/development', ['Mobile/Reports/ApplicationModule'], functi
             'crm': {
                 isDefault: true,
                 offline: true,
-                url: 'http://localhost:1698/sdata/',
+                url: 'http://localhost:56056/sdata/',
                 json: true
             }
         },
