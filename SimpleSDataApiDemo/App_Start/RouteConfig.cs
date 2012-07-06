@@ -14,6 +14,10 @@ namespace SimpleSDataApiDemo
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapHttpRoute("SDataTemplateWithWhere", "sdata/{controller}/$template/query",
+                new { action = "GetTemplate", query = RouteParameter.Optional },
+                new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) });
+
             routes.MapHttpRoute("SDataTemplate", "sdata/{controller}/$template",
                             new { action = "GetTemplate" },
                             new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) });
