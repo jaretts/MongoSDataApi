@@ -10,6 +10,8 @@ namespace Mobile.Models
     {
         IQueryable<T> GetAll();
 
+        IQueryable<T> GetAll(string select);
+
         T GetTemplate();
 
         void Post(String selector, T value);

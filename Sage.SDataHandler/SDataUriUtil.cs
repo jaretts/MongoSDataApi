@@ -52,36 +52,6 @@ namespace Sage.SDataHandler
             {
                 // Need to replace the old Query portion on Uri
                 retValue = ReplaceQueryPortionOfUri(requestUri, translatedUriQuery);
-
-                NameValueCollection translatedQuery = retValue.ParseQueryString();
-                if (convertDirection == SDataUriKeys.CONVERT_TO_ODATA 
-                    && translatedQuery[SDataUriKeys.ODATA_SELECT] != null)
-                {
-                    // need special logic for select because Web API does not complete support OData
-                    // convert:
-                    //      sdata/Customer?startIndex=1&count=5&select=some select
-                    // to   sdata/Customer/valueofselect/query?startIndex=1&count=5
-                    string[] uriSegs = retValue.Segments;
-
-                    string newUri = "";
-
-                    string lastSeg = uriSegs[uriSegs.Length-1];
-                    // should have something like Customer?startIndex=1&count=5&select=some select
-
-                     uriSegs[uriSegs.Length-1] = lastSeg + "/" + translatedQuery[SDataUriKeys.ODATA_SELECT]
-                                        + "/" + lastSeg;
-
-                    for(int i = 0; i < uriSegs.Length; i++)
-                    {
-                        newUri += uriSegs[i];
-                        if(i != (uriSegs.Length - 1))
-                        {
-                            newUri = "/";
-                        }
-                    }
-
-                    retValue = new Uri(newUri + "?" + translatedUriQuery);
-                }
             }
             return retValue;
         }

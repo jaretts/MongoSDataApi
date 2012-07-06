@@ -11,7 +11,6 @@ namespace SimpleSDataApiDemo.Controllers
     public class CustomerController : DefaultController<Customer>
     {
         public CustomerController(IRepository<Customer> repo) : base(repo) { }
-
     }
 
 }

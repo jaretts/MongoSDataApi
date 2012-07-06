@@ -30,6 +30,12 @@ namespace MongoRepository
             return pcollect.FindAllAs<T>().AsQueryable<T>();
         }
 
+        public IQueryable<T> GetAll(string select)
+        {
+            MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
+            return pcollect.FindAllAs<T>().AsQueryable<T>();
+        }
+
         public T GetTemplate()
         {
             try

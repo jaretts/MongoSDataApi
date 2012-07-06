@@ -31,8 +31,9 @@ namespace Sage.SDataHandler
         public const String SDATA_WHERE = "where";
         public const String ODATA_WHERE = "$filter";
 
+        // OData select not implemented in Web API RC so must  be handled by controller
         public const String SDATA_SELECT = "select";
-        public const String ODATA_SELECT = "$select";
+        public const String ODATA_SELECT = SDATA_SELECT; // "$select";
 
         public const String SDATA_FORMAT_PARAM = "format";
         public const String JSON_FORMAT_TYPE = "json";

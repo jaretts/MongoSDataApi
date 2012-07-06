@@ -22,18 +22,22 @@ namespace SimpleSDataApiDemo.Controllers
             return respository.GetTemplate();
         }
 
-        virtual public IQueryable<T> GetSelect(string select, string query)
-        {
-            return Get();//.Select(select);
-        }
-
-
         /// GET api/default
         /// Must have Queryable attribute or OData does not work
-        [Queryable] 
-        public virtual IQueryable<T> Get()
+        [Queryable]
+        public virtual IQueryable<T> GetCollection(string select)
         {
-            IQueryable<T> retVal = respository.GetAll();
+            IQueryable<T> retVal;
+            
+            if(string.IsNullOrEmpty(select))
+            {
+                retVal = respository.GetAll();
+            }
+            else
+            {
+                retVal = respository.GetAll(select);
+            }
+            
 
             if (retVal == null)
             {
@@ -50,9 +54,9 @@ namespace SimpleSDataApiDemo.Controllers
         }
 
         // GET api/product/5
-        public virtual T Get(String selector)
+        public virtual T GetSingle(String selector)
         {
-            return Get().FirstOrDefault(y => y._id == selector);
+            return GetCollection("").FirstOrDefault(y => y._id == selector);
         }
 
         // POST api/customers/5
@@ -66,7 +70,7 @@ namespace SimpleSDataApiDemo.Controllers
         {
             respository.Put(selector, value);
 
-            return Get(selector);
+            return GetSingle(selector);
         }
 
         // DELETE api/customers/5

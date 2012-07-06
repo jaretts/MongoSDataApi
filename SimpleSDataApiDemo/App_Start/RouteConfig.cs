@@ -20,23 +20,15 @@ namespace SimpleSDataApiDemo
 
             routes.MapHttpRoute(name: "SDataSingleResourceKind",
                  routeTemplate: "sdata/{controller}('{selector}')",
-                 defaults: new { selector = RouteParameter.Optional });
+                 defaults: new { action = "GetSingle", selector = RouteParameter.Optional });
 
             routes.MapHttpRoute(name: "SDataCollection",
                 routeTemplate: "sdata/{controller}/{query}",
-                defaults: new { action = "Get", query = RouteParameter.Optional });
-
-            routes.MapHttpRoute(name: "SDataSelectCollection",
-                routeTemplate: "sdata/{controller}/{select}/{query}",
-                defaults: new { action = "GetSelect",
-                                select = RouteParameter.Optional,
-                                query = RouteParameter.Optional
-                                        
-                });
+                defaults: new { action = "GetCollection", query = RouteParameter.Optional });
 
             routes.MapHttpRoute(name: "SDataCollectionFull",
                 routeTemplate: "sdata/-/-/-/{controller}/{query}",
-                defaults: new { action = "Get", query = RouteParameter.Optional });
+                defaults: new { action = "GetCollection", query = RouteParameter.Optional });
 
             routes.MapRoute(
                 name: "Default",
