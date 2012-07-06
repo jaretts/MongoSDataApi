@@ -54,9 +54,9 @@ namespace SimpleSDataApiDemo.Controllers
         }
 
         // GET api/product/5
-        public virtual T GetSingle(String selector)
+        public virtual T GetSingle(String selector, String select)
         {
-            return GetCollection("").FirstOrDefault(y => y._id == selector);
+            return GetCollection(select).FirstOrDefault(y => y._id == selector);
         }
 
         // POST api/customers/5
@@ -70,7 +70,7 @@ namespace SimpleSDataApiDemo.Controllers
         {
             respository.Put(selector, value);
 
-            return GetSingle(selector);
+            return GetSingle(selector, "");
         }
 
         // DELETE api/customers/5

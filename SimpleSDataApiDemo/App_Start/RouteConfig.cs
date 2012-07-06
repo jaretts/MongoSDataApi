@@ -19,8 +19,14 @@ namespace SimpleSDataApiDemo
                             new { httpMethod = new HttpMethodConstraint(new string[] { "GET" }) });
 
             routes.MapHttpRoute(name: "SDataSingleResourceKind",
-                 routeTemplate: "sdata/{controller}('{selector}')",
-                 defaults: new { action = "GetSingle", selector = RouteParameter.Optional });
+                 routeTemplate: "sdata/{controller}('{selector}')/{query}",
+                 defaults: new { action = "GetSingle", selector = RouteParameter.Optional,
+                                                        query = RouteParameter.Optional });
+
+            routes.MapHttpRoute(name: "SDataSingleResourceKindFull",
+                 routeTemplate: "sdata/-/-/-/{controller}('{selector}')/{query}",
+                 defaults: new { action = "GetSingle", selector = RouteParameter.Optional,
+                                                        query = RouteParameter.Optional });
 
             routes.MapHttpRoute(name: "SDataCollection",
                 routeTemplate: "sdata/{controller}/{query}",
