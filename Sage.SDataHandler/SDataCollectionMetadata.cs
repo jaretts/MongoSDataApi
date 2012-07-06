@@ -7,25 +7,34 @@ using System.Net.Http;
 
 namespace Sage.SDataHandler
 {
-
+    [DataContract]
     public class SDataCollectionMetadata<T> where T : class
     {
+        [DataMember(Name = "$url")]
         public String url { get; set; }
 
+        [DataMember(Name = "$totalResults")]
         public int TotalResults { get; set; }
 
+        [DataMember(Name = "$startIndex")]
         public int StartIndex { get; set; }
 
+        [DataMember(Name = "$itemsPerPage")]
         public int ItemsPerPage { get; set; }
 
+        [DataMember(Name="$next")]
         public String Next { get; set; }
 
+        [DataMember(Name = "$previous")]
         public String previous { get; set; }
 
+        [DataMember(Name = "$first")]
         public String First { get; set; }
 
+        [DataMember(Name = "$last")]
         public String Last { get; set; }
 
+        [DataMember(Name = "$resources")]
         public T[] Resources { get; set; }
 
         public SDataCollectionMetadata(HttpResponseMessage httpResponse, bool isIQueryable)

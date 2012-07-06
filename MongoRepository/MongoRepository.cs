@@ -32,20 +32,49 @@ namespace MongoRepository
 
         public IQueryable<T> GetAll(string select)
         {
+            select = select.Trim();
+            if (string.IsNullOrEmpty(select))
+            {
+                return GetAll();
+            }
+
+            string[] includeFields = select.Split(',');
+            if (includeFields.Length < 1)
+            {
+                return GetAll();
+            }
+
             MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
-            return pcollect.FindAllAs<T>().AsQueryable<T>();
+
+            PropertyInfo[] props = typeof(T).GetProperties();
+            string[] fieldsToExclude = new string[props.Length];
+
+            for(int i = 0; i < fieldsToExclude.Length; i++)
+            {
+                fieldsToExclude[i] = props[i].Name;
+            }
+
+            MongoCursor<T> result = pcollect.FindAllAs<T>();
+
+            result.Fields = Fields.Exclude(fieldsToExclude);
+            result.Fields = Fields.Include(includeFields);
+
+            return result.AsQueryable<T>();
         }
 
         public T GetTemplate()
         {
+            T retValue;
             try
             {
-                return (T)typeof(T).GetConstructor(new Type[] { }).Invoke(new object[] { });
+                retValue = (T)typeof(T).GetConstructor(new Type[] { }).Invoke(new object[] { });
+                retValue.InitializeDefaults();
             }
             catch
             {
-                return default(T);
+                retValue = default(T);
             }
+            return retValue;
         }
 
         public void Post(String selector, T value)

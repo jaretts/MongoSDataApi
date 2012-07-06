@@ -11,7 +11,7 @@ namespace Mobile.Models
     [BsonIgnoreExtraElements]
     public class Customer : MobileModelEntity
     {
-        public Customer()
+        override public void InitializeDefaults()
         {
             city = "Irvine";
             state = "CA";

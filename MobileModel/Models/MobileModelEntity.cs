@@ -11,18 +11,22 @@ namespace Mobile.Models
     [BsonIgnoreExtraElements]
     public abstract class  MobileModelEntity
     {
+        /*
         [DataMember(Name = "$url")]
         public String relativeUrl
         {
             get
             {
-                return this.GetType().Name + "(" + this._id + ")";
+                return this.GetType().Name + "('" + this._id + "')";
             }
         }
+         */
 
         [DataMember(Name = "$key")]
         [Key]
         public String _id { get; set; }
+
+        virtual public void InitializeDefaults() { }
 
     }
 }
