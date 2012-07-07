@@ -43,7 +43,8 @@
             'Id',
             'customername',
             'telephone',
-            'state'
+            'state',
+            'openorderamt'
         ],
         resourceKind: 'Customer',
         /*

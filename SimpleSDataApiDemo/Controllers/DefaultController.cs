@@ -56,13 +56,13 @@ namespace SimpleSDataApiDemo.Controllers
         // GET api/product/5
         public virtual T GetSingle(String selector, String select)
         {
-            return GetCollection(select).FirstOrDefault(y => y._id == selector);
+            return GetCollection(select).FirstOrDefault(y => y.Id == selector);
         }
 
         // POST api/customers/5
-        public T Post(String selector, T value)
+        public T Post(T value)
         {
-            return Put(selector, value);
+            return respository.Post(value);
         }
 
         // PUT api/customers/5

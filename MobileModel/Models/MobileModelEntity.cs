@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Mobile.Models
 {
@@ -24,7 +25,8 @@ namespace Mobile.Models
 
         [DataMember(Name = "$key")]
         [Key]
-        public String _id { get; set; }
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
+        public String Id { get; set; }
 
         virtual public void InitializeDefaults() { }
 

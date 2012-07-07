@@ -77,12 +77,15 @@ namespace MongoRepository
             return retValue;
         }
 
-        public void Post(String selector, T value)
+        public T Post(T value)
         {
-            Put(selector, value);
+
+            MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
+            pcollect.Save(value);
+            return GetAll().FirstOrDefault(y => y.Id == value.Id);
         }
 
-        public void Put(String selector, T value)
+        public T Put(String selector, T value)
         {
             // not needed because have an instance variable
             //var server = MongoServer.Create(connectionString);
@@ -90,9 +93,9 @@ namespace MongoRepository
 
             MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
 
-            var query = Query.EQ("_id", value._id);
+            var query = Query.EQ("_id", value.Id);
 
-            BsonElement bsonElem = new BsonElement("_id", value._id);
+            BsonElement bsonElem = new BsonElement("_id", value.Id);
 
             var wrapper = BsonDocumentWrapper.Create(value);
             var doc = wrapper.ToBsonDocument();
@@ -103,8 +106,8 @@ namespace MongoRepository
                 { "$set", doc }
             };
 
-            pcollect.Update(Query.EQ("_id", value._id), update);
-
+            pcollect.Update(Query.EQ("_id", value.Id), update);
+            return GetAll().FirstOrDefault(y => y.Id == value.Id);
         }
     }
 

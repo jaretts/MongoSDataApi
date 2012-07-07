@@ -12,6 +12,8 @@ using SimpleSDataApiDemo.Controllers;
 using Mobile.Models;
 using MongoRepository;
 using SimpleSDataApiDemo.DependencyResolvers;
+using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization;
 
 
 namespace SimpleSDataApiDemo
@@ -31,6 +33,13 @@ namespace SimpleSDataApiDemo
 
             RegisterDependencyResolver();
             GlobalConfiguration.Configuration.MessageHandlers.Add(new SDataHandler());
+
+            // set up Ignore if null for all controllers - should this be in another class so Mongo 
+            // stuff doesn't appear in here? - Added using above and also added reference to MongoDB.Bson
+            var myConventions = new ConventionProfile();
+            myConventions.SetIgnoreIfNullConvention(new AlwaysIgnoreIfNullConvention());
+            BsonClassMap.RegisterConventions(myConventions, t => t.FullName.StartsWith("Mobile.")
+            );
         }
 
         private static void RegisterDependencyResolver()

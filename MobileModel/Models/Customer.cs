@@ -22,6 +22,12 @@ namespace Mobile.Models
         public String customername { get; set; }
 
         [DataMember]
+        public String ardivisionno { get; set; }
+
+        [DataMember]
+        public String customerno { get; set; }
+
+        [DataMember]
         public String addressline1 { get; set; }
 
         [DataMember]
@@ -37,6 +43,7 @@ namespace Mobile.Models
         public String telephoneno { get; set; }
 
         [DataMember]
-        public Double openorderamt { get; set; }
+        public double openorderamt { get; set; }
+
     }
 }

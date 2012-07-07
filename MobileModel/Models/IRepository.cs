@@ -14,8 +14,8 @@ namespace Mobile.Models
 
         T GetTemplate();
 
-        void Post(String selector, T value);
+        T Post(T value);
 
-        void Put(String selector, T value);
+        T Put(String selector, T value);
     }
 }
