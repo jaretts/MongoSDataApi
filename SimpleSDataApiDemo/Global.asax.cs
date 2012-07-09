@@ -38,8 +38,7 @@ namespace SimpleSDataApiDemo
             // stuff doesn't appear in here? - Added using above and also added reference to MongoDB.Bson
             var myConventions = new ConventionProfile();
             myConventions.SetIgnoreIfNullConvention(new AlwaysIgnoreIfNullConvention());
-            BsonClassMap.RegisterConventions(myConventions, t => t.FullName.StartsWith("Mobile.")
-            );
+            BsonClassMap.RegisterConventions(myConventions, t => t.FullName.StartsWith("Mobile."));
         }
 
         private static void RegisterDependencyResolver()
