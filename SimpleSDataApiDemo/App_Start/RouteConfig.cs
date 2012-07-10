@@ -26,12 +26,12 @@ namespace SimpleSDataApiDemo
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapHttpRoute(name: "SDataSingleResourceKindFull",
+            routes.MapHttpRoute(name: "SDataSingleResourceKind",
                  routeTemplate: "sdata/-/-/-/{controller}('{selector}')/{query}",
                  defaults: new
                  {
-                     selector = RouteParameter.Optional,
-                     query = RouteParameter.Optional
+                     query = RouteParameter.Optional,
+                     action = "SDataSingleResourceKind"
                  });
 
             routes.MapHttpRoute(name: "SDataTemplate",
@@ -43,13 +43,12 @@ namespace SimpleSDataApiDemo
                }
               );
             
-            routes.MapHttpRoute(name: "SDataCollectionFull",
+            routes.MapHttpRoute(name: "SDataCollection",
                  routeTemplate: "sdata/-/-/-/{controller}/{query}",
                  defaults: new 
                  {
-                     query = RouteParameter.Optional 
-                     ,action = "GetCollection"
-                     ,httpMethod = HTTP_METHOD_GET
+                     query = RouteParameter.Optional,
+                     action = "SDataCollection"
                  });
 
              routes.MapRoute(

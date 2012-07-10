@@ -81,12 +81,17 @@ namespace Sage.SDataHandler
 
         private bool ResponseIsValid(HttpResponseMessage response)
         {
-            bool retVal = 
-                response != null && 
-                response.StatusCode == HttpStatusCode.OK &&
-                response.Content is ObjectContent;
+            if (response.StatusCode != HttpStatusCode.OK && response.StatusCode != HttpStatusCode.Created)
+            {
+                return false;
+            }
+
+            if (response == null || !(response.Content is ObjectContent))
+            {
+                return false;
+            }
             
-            return retVal;
+            return true;
         }
 
         }
