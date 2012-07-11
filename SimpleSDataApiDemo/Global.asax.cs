@@ -53,6 +53,13 @@ namespace SimpleSDataApiDemo
                                 new HierarchicalLifetimeManager(),
                                 new InjectionConstructor("customers"));
 
+            // Register the SalesQuote Controller
+            unity.RegisterType<SalesQuoteController>();
+
+            unity.RegisterType<IRepository<SalesQuote>, MongoRepository<SalesQuote>>(
+                                new HierarchicalLifetimeManager(),
+                                new InjectionConstructor("salesQuote"));
+
             GlobalConfiguration.Configuration.DependencyResolver = new IoCContainer(unity);
         }
 
