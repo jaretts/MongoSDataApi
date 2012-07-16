@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mobile.Models
 {
-
+    /*
     [DataContract]
     public class SalesQuote : MobileModelEntity
     {
@@ -53,11 +55,6 @@ namespace Mobile.Models
         [DataMember]
         public String Description { get; set; }
     }
-
-    [DataContract]
-    public class NewSalesQuote : SalesQuote
-    {
-    }
-
+    */
 }
 

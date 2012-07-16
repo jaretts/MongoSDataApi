@@ -14,6 +14,8 @@ using MongoRepository;
 using SimpleSDataApiDemo.DependencyResolvers;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 
 namespace SimpleSDataApiDemo
@@ -59,6 +61,12 @@ namespace SimpleSDataApiDemo
             unity.RegisterType<IRepository<SalesQuote>, MongoRepository<SalesQuote>>(
                                 new HierarchicalLifetimeManager(),
                                 new InjectionConstructor("salesQuote"));
+
+            unity.RegisterType<NewSalesQuoteController>();
+            QueryDocument tmpQuery = new QueryDocument("Status", "N");
+            unity.RegisterType<IRepository<NewSalesQuote>, MongoRepository<NewSalesQuote>>(
+                                new HierarchicalLifetimeManager(),
+                                new InjectionConstructor("salesQuote", tmpQuery));
 
             GlobalConfiguration.Configuration.DependencyResolver = new IoCContainer(unity);
         }

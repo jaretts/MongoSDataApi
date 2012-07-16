@@ -16,18 +16,41 @@ namespace MongoRepository
         String connectionString = "mongodb://localhost";
         MongoDatabase db;
         String collectionName;
+        QueryDocument controllerQuery;
 
-        public MongoRepository(String init_CollectionName)
+        private void InitMongo(String init_CollectionName)
         {
             var server = MongoServer.Create(connectionString);
             db = server.GetDatabase("test");
             collectionName = init_CollectionName;
         }
 
+        public MongoRepository(String init_CollectionName)
+        {
+            this.InitMongo(init_CollectionName);
+        }
+
+        public MongoRepository(String init_CollectionName, QueryDocument init_ControllerQuery)
+        {
+            this.InitMongo(init_CollectionName);
+            controllerQuery = init_ControllerQuery;
+        }
+
         public IQueryable<T> GetAll()
         {
             MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
-            return pcollect.FindAllAs<T>().AsQueryable<T>();
+            //QueryDocument q = new QueryDocument("state", "CA");
+            //return pcollect.FindAllAs<T>().AsQueryable<T>();
+            //q.Add("acl", "steve.malmgren@sage.com");
+            //return pcollect.FindAs<T>(q).AsQueryable<T>();
+            if (controllerQuery != null)
+            {
+                return pcollect.FindAs<T>(controllerQuery).AsQueryable<T>();
+            }
+            else
+            {
+                return pcollect.FindAllAs<T>().AsQueryable<T>();
+            }
         }
 
         public IQueryable<T> GetAll(string select)

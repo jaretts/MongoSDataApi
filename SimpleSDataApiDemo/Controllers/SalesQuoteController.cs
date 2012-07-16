@@ -13,4 +13,11 @@ namespace SimpleSDataApiDemo.Controllers
         public SalesQuoteController(IRepository<SalesQuote> repo) : base(repo) {  }
     }
 
+    //swm not diging that I also need to add a new POCO
+    public class NewSalesQuoteController : DefaultController<NewSalesQuote>
+    {
+        public NewSalesQuoteController(IRepository<NewSalesQuote> repo) : base(repo) {  }
+    }
+
+
 }
