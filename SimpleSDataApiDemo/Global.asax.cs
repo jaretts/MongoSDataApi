@@ -55,19 +55,55 @@ namespace SimpleSDataApiDemo
                                 new HierarchicalLifetimeManager(),
                                 new InjectionConstructor("customers"));
 
+           
             // Register the SalesQuote Controller
-            unity.RegisterType<SalesQuoteController>();
+            unity.RegisterType<SalesDocumentController>();
 
-            unity.RegisterType<IRepository<SalesQuote>, MongoRepository<SalesQuote>>(
+            unity.RegisterType<IRepository<SalesDocument>, MongoRepository<SalesDocument>>(
                                 new HierarchicalLifetimeManager(),
-                                new InjectionConstructor("salesQuote"));
+                                new InjectionConstructor("salesDocument"));
+       
+            //DraftSalesDocument controller
+            unity.RegisterType<draftSalesDocumentController>();
+            Dictionary<String, String> tmpQueryDraft = new Dictionary<string, string>();
+            tmpQueryDraft.Add("Status", "D");
 
-            unity.RegisterType<NewSalesQuoteController>();
-            QueryDocument tmpQuery = new QueryDocument("Status", "N");
-            unity.RegisterType<IRepository<NewSalesQuote>, MongoRepository<NewSalesQuote>>(
+            //QueryDocument tmpQuery = new QueryDocument("Status", "N");
+            unity.RegisterType<IRepository<draftSalesDocument>, MongoRepository<draftSalesDocument>>(
                                 new HierarchicalLifetimeManager(),
-                                new InjectionConstructor("salesQuote", tmpQuery));
+                                new InjectionConstructor("salesDocument", tmpQueryDraft));
+           
+            //QuoteRequest controller
+            unity.RegisterType<quoteRequestController>();
+            Dictionary<String, String> tmpQueryQR = new Dictionary<string, string>();
+            tmpQueryQR.Add("Status", "R");
 
+        
+
+            unity.RegisterType<IRepository<quoteRequest>, MongoRepository<quoteRequest>>(
+                                new HierarchicalLifetimeManager(),
+                                new InjectionConstructor("salesDocument", tmpQueryQR));
+
+            //PendingQuote controller
+            unity.RegisterType<pendingQuoteController>();
+            Dictionary<String, String> tmpQueryPQ = new Dictionary<string, string>();
+            tmpQueryPQ.Add("Status", "P");
+
+            unity.RegisterType<IRepository<pendingQuote>, MongoRepository<pendingQuote>>(
+                                new HierarchicalLifetimeManager(),
+                                new InjectionConstructor("salesDocument", tmpQueryPQ));
+
+
+            //SalesQuote controller
+            unity.RegisterType<salesQuoteController>();
+            Dictionary<String, String> tmpQuerySQ = new Dictionary<string, string>();
+            tmpQuerySQ.Add("Status", "Q");
+
+            unity.RegisterType<IRepository<salesQuote>, MongoRepository<salesQuote>>(
+                                new HierarchicalLifetimeManager(),
+                                new InjectionConstructor("salesDocument", tmpQuerySQ));
+            
+            
             GlobalConfiguration.Configuration.DependencyResolver = new IoCContainer(unity);
         }
 

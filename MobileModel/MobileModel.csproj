@@ -40,11 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\NewSalesQuote.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\IRepository.cs" />
     <Compile Include="Models\MobileModelEntity.cs" />
-    <Compile Include="Models\SalesQuote.cs" />
+    <Compile Include="Models\SalesDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

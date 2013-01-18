@@ -17,5 +17,7 @@ namespace Mobile.Models
         T Post(T value);
 
         T Put(String selector, T value);
+
+        String GetErrorText();
     }
 }

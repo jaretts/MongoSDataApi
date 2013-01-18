@@ -17,6 +17,7 @@ namespace MongoRepository
         MongoDatabase db;
         String collectionName;
         QueryDocument controllerQuery;
+        Dictionary<String, String> controllerDict;
 
         private void InitMongo(String init_CollectionName)
         {
@@ -30,10 +31,27 @@ namespace MongoRepository
             this.InitMongo(init_CollectionName);
         }
 
-        public MongoRepository(String init_CollectionName, QueryDocument init_ControllerQuery)
+        public MongoRepository(String init_CollectionName, Dictionary<String, String> init_ControllerDict)
         {
             this.InitMongo(init_CollectionName);
-            controllerQuery = init_ControllerQuery;
+            controllerDict = init_ControllerDict;
+            
+            // setup controllerQuery based on dictionary of applied where clauses
+            if (controllerDict != null)
+            {
+
+                foreach (KeyValuePair<String, String> pair in controllerDict)
+                {
+                    controllerQuery = new QueryDocument(pair.Key, pair.Value);
+                }
+            }
+        }
+
+        //public String errorText { get; }\
+        private String _errorText;
+        public String GetErrorText()
+        {
+            return _errorText;
         }
 
         public IQueryable<T> GetAll()
@@ -43,6 +61,7 @@ namespace MongoRepository
             //return pcollect.FindAllAs<T>().AsQueryable<T>();
             //q.Add("acl", "steve.malmgren@sage.com");
             //return pcollect.FindAs<T>(q).AsQueryable<T>();
+
             if (controllerQuery != null)
             {
                 return pcollect.FindAs<T>(controllerQuery).AsQueryable<T>();
@@ -103,8 +122,33 @@ namespace MongoRepository
         public T Post(T value)
         {
 
+            // 1. Need to check for existence of value.Id, then validate state transition (e.g. from existing Draft to QuoteRequest, OrderRequest; etc)
+            //    Then call self.Put(with selector)
+            //    Otherwise we need to fail on state transition
+
+            _errorText = null;
+
+            if (value.Id != null)
+            {
+                // Post to a new resource/state, need to PUT to update status field.  Valid state transition business rules to be enforced in PUT
+                return Put(value.Id, value);
+            }
+
             MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
+
+            //set document state based on resource
+            if (controllerDict != null)
+            {
+                foreach (KeyValuePair<String, String> pair in controllerDict)
+                {
+                    PropertyInfo tmpPropInfo = typeof(T).GetProperty(pair.Key);
+                    tmpPropInfo.SetValue(value, pair.Value, null);
+                }
+            }
+
             pcollect.Save(value);
+
+            
             return GetAll().FirstOrDefault(y => y.Id == value.Id);
         }
 
@@ -113,6 +157,17 @@ namespace MongoRepository
             // not needed because have an instance variable
             //var server = MongoServer.Create(connectionString);
             //MongoDatabase db = server.GetDatabase("test");
+
+            // 1. need to ensure selector == value.Id or bail out with failure
+            // 
+            _errorText = null;
+
+            if (selector != value.Id)
+            {
+                _errorText = @"resource selector/Id mismatch";
+                return null;
+            }
+
 
             MongoCollection<T> pcollect = db.GetCollection<T>(collectionName);
 
@@ -123,6 +178,36 @@ namespace MongoRepository
             var wrapper = BsonDocumentWrapper.Create(value);
             var doc = wrapper.ToBsonDocument();
             doc.RemoveElement(bsonElem);
+
+            /*
+            BsonElement tmpElement = doc.GetElement("Status");
+
+            if (tmpElement.Value == "S")
+            {
+                tmpElement.Value = "N";
+            }
+            */
+
+            // all of this checking should really be done in a biz layer
+            if (controllerDict != null)
+            {
+                foreach (KeyValuePair<String, String> pair in controllerDict)
+                {
+                    //PropertyInfo tmpPropInfo = typeof(T).GetProperty(pair.Key);
+                    //tmpPropInfo.SetValue(value, pair.Value, null);
+                    BsonElement tmpElement = doc.GetElement(pair.Key);
+
+                    // here we check current state and see if valid to proceed to this state
+                    // hard coded Request cannot go back to Draft
+                    if (tmpElement.Value == "R" & pair.Value == "D")
+                    {
+                        _errorText = @"Invalid state transition Request cannot be put back to Draft status";
+                        return null;
+                    }
+
+                    tmpElement.Value = pair.Value;
+                }
+            }
 
             var update = new UpdateDocument
             {

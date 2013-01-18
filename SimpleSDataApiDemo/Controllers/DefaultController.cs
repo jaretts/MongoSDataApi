@@ -102,6 +102,14 @@ namespace SimpleSDataApiDemo.Controllers
 
             var response = Request.CreateResponse<T>(retStatus, resourceModified);
 
+            // check for any errors from repository and reset status code and reason phrase
+            String tmpReason = respository.GetErrorText();
+            if (tmpReason != null)
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ReasonPhrase = tmpReason;
+                response.Content = new StringContent(tmpReason);
+            }
             return response;
         }
 
@@ -111,8 +119,28 @@ namespace SimpleSDataApiDemo.Controllers
         public HttpResponseMessage Post(T value)
         {
             T addedResource = respository.Post(value);
+            HttpStatusCode retStatus;
 
-            var response = Request.CreateResponse<T>(HttpStatusCode.Created, addedResource);
+            if (addedResource == null)
+            {
+                retStatus = HttpStatusCode.BadRequest;
+            }
+            else
+            {
+                retStatus = HttpStatusCode.Created;
+            }
+
+
+            var response = Request.CreateResponse<T>(retStatus, addedResource);
+            
+            // check for any errors from repository and reset status code and reason phrase
+            String tmpReason = respository.GetErrorText();
+            if (tmpReason != null)
+            {
+                response.ReasonPhrase = tmpReason; //this doesn't appear to do anything at least in firefox
+                response.Content = new StringContent(tmpReason);
+            }            
+
             return response;
         }
 

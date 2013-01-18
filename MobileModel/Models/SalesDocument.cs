@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -9,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Mobile.Models
 {
-    /*
+
     [DataContract]
-    public class SalesQuote : MobileModelEntity
+    public class SalesDocument : MobileModelEntity
     {
         [DataMember]
         public String CustomerKey { get; set; }
@@ -34,15 +32,15 @@ namespace Mobile.Models
         [DataMember]
         public String Status { get; set; }
         [DataMember]
-        public List<QuoteLines> Details { get; set; }
+        public List<SalesLines> Details { get; set; }
 
-        public SalesQuote()
+        public SalesDocument()
         {
-            this.Details = new List<QuoteLines>();
+            this.Details = new List<SalesLines>();
         }
     }
 
-    public class QuoteLines : MobileModelEntity
+    public class SalesLines : MobileModelEntity
     {
         [DataMember]
         public String ItemID { get; set; }
@@ -55,6 +53,24 @@ namespace Mobile.Models
         [DataMember]
         public String Description { get; set; }
     }
-    */
+
+    [DataContract]
+    public class draftSalesDocument : SalesDocument
+    {
+    }
+
+    public class quoteRequest : SalesDocument
+    {
+    }
+
+    public class pendingQuote : SalesDocument
+    {
+    }
+
+    public class salesQuote : SalesDocument
+    {
+    }
+
+
 }
 
