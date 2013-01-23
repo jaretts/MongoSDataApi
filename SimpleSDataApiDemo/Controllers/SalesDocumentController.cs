@@ -35,22 +35,3 @@ namespace SimpleSDataApiDemo.Controllers
         public salesQuoteController(IRepository<salesQuote> repo) : base(repo) { }
     }
 }
-
-
-/*
-    public class draftSalesDocument : SalesDocument
-    {
-    }
-
-    public class quoteRequest : SalesDocument
-    {
-    }
-
-    public class pendingQuote : SalesDocument
-    {
-    }
-
-    public class salesQuote : SalesDocument
-    {
-    }
-*/

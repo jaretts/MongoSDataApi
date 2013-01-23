@@ -18,12 +18,29 @@ namespace MongoRepository
         String collectionName;
         QueryDocument controllerQuery;
         Dictionary<String, String> controllerDict;
+        String _userToken;
+        //String _dataset;
 
         private void InitMongo(String init_CollectionName)
         {
             var server = MongoServer.Create(connectionString);
             db = server.GetDatabase("test");
             collectionName = init_CollectionName;
+        }
+
+        private void InitQueryDocument()
+        {
+            // setup controllerQuery based on dictionary of applied where clauses
+            if (controllerDict != null)
+            {
+                controllerQuery = null;
+                controllerQuery = new QueryDocument();
+                foreach (KeyValuePair<String, String> pair in controllerDict)
+                {
+                    //controllerQuery = new QueryDocument(pair.Key, pair.Value);
+                    controllerQuery.Add(pair.Key, pair.Value);
+                }
+            }
         }
 
         public MongoRepository(String init_CollectionName)
@@ -35,16 +52,29 @@ namespace MongoRepository
         {
             this.InitMongo(init_CollectionName);
             controllerDict = init_ControllerDict;
-            
-            // setup controllerQuery based on dictionary of applied where clauses
-            if (controllerDict != null)
-            {
+        }
 
-                foreach (KeyValuePair<String, String> pair in controllerDict)
-                {
-                    controllerQuery = new QueryDocument(pair.Key, pair.Value);
-                }
+        public void SetTenantDataSet(string dataset, string userToken)
+        {
+            //_dataset = dataset;
+
+            _userToken = userToken;
+            if (controllerDict == null)
+            {
+                controllerDict = new Dictionary<string, string>();
             }
+            if (controllerDict.ContainsKey("tenantID")) {
+                controllerDict.Remove("tenantID");
+            }
+            controllerDict.Add("tenantID", dataset); // what is the scope and is there a potential conflict?
+
+            //for now assume all collections have a CreatedBy column - TO-DO should have meta data for controller whether user filtering is applied
+            if (controllerDict.ContainsKey("CreatedBy"))
+            {
+                controllerDict.Remove("CreatedBy");
+            }           
+            controllerDict.Add("CreatedBy", _userToken);
+            this.InitQueryDocument();
         }
 
         //public String errorText { get; }\
@@ -142,7 +172,14 @@ namespace MongoRepository
                 foreach (KeyValuePair<String, String> pair in controllerDict)
                 {
                     PropertyInfo tmpPropInfo = typeof(T).GetProperty(pair.Key);
-                    tmpPropInfo.SetValue(value, pair.Value, null);
+                    if (tmpPropInfo != null)
+                    {
+                        tmpPropInfo.SetValue(value, pair.Value, null);
+                    }
+                    else
+                    {
+                        //
+                    }
                 }
             }
 
@@ -195,6 +232,7 @@ namespace MongoRepository
                 {
                     //PropertyInfo tmpPropInfo = typeof(T).GetProperty(pair.Key);
                     //tmpPropInfo.SetValue(value, pair.Value, null);
+
                     BsonElement tmpElement = doc.GetElement(pair.Key);
 
                     // here we check current state and see if valid to proceed to this state
@@ -206,6 +244,7 @@ namespace MongoRepository
                     }
 
                     tmpElement.Value = pair.Value;
+
                 }
             }
 

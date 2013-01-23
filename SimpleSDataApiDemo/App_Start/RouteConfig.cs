@@ -27,7 +27,7 @@ namespace SimpleSDataApiDemo
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapHttpRoute(name: "SDataSingleResourceKind",
-                 routeTemplate: "sdata/-/-/-/{controller}('{selector}')/{query}",
+                 routeTemplate: "sdata/-/-/{dataset}/{controller}('{selector}')/{query}",
                  defaults: new
                  {
                      query = RouteParameter.Optional,
@@ -35,7 +35,7 @@ namespace SimpleSDataApiDemo
                  });
 
             routes.MapHttpRoute(name: "SDataTemplate",
-               routeTemplate: "sdata/-/-/-/{controller}/$template",
+               routeTemplate: "sdata/-/-/{dataset}/{controller}/$template",
                defaults: new
                {
                    action = "GetTemplate",
@@ -44,7 +44,7 @@ namespace SimpleSDataApiDemo
               );
             
             routes.MapHttpRoute(name: "SDataCollection",
-                 routeTemplate: "sdata/-/-/-/{controller}/{query}",
+                 routeTemplate: "sdata/-/-/{dataset}/{controller}/{query}",
                  defaults: new 
                  {
                      query = RouteParameter.Optional,

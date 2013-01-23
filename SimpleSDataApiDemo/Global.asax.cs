@@ -40,6 +40,7 @@ namespace SimpleSDataApiDemo
             // stuff doesn't appear in here? - Added using above and also added reference to MongoDB.Bson
             var myConventions = new ConventionProfile();
             myConventions.SetIgnoreIfNullConvention(new AlwaysIgnoreIfNullConvention());
+            myConventions.SetIgnoreExtraElementsConvention(new AlwaysIgnoreExtraElementsConvention());
             BsonClassMap.RegisterConventions(myConventions, t => t.FullName.StartsWith("Mobile."));
         }
 
@@ -68,7 +69,6 @@ namespace SimpleSDataApiDemo
             Dictionary<String, String> tmpQueryDraft = new Dictionary<string, string>();
             tmpQueryDraft.Add("Status", "D");
 
-            //QueryDocument tmpQuery = new QueryDocument("Status", "N");
             unity.RegisterType<IRepository<draftSalesDocument>, MongoRepository<draftSalesDocument>>(
                                 new HierarchicalLifetimeManager(),
                                 new InjectionConstructor("salesDocument", tmpQueryDraft));

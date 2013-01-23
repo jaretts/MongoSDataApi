@@ -34,6 +34,7 @@
     <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\mongocsharpdriver.1.5\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -42,6 +43,7 @@
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\IRepository.cs" />
+    <Compile Include="Models\Master\SalesDocBusinessRules.cs" />
     <Compile Include="Models\MobileModelEntity.cs" />
     <Compile Include="Models\SalesDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

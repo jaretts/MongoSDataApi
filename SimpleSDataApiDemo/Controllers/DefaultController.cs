@@ -10,29 +10,44 @@ namespace SimpleSDataApiDemo.Controllers
 {
     public class DefaultController<T> : ApiController where T : MobileModelEntity // class
     {
-        public IRepository<T> respository { get; set; }
+        public IRepository<T> repository { get; set; }
 
         public DefaultController(IRepository<T> respository)
         {
-            this.respository = respository;
+            this.repository = respository;
         }
 
+
+        private string GetUserTokenFromRequest()
+        {
+            IEnumerable<string> values;
+            if (Request.Headers.TryGetValues("X-User-Token", out values))
+            {
+                foreach (string val in values)
+                {
+                    return val;
+                }
+            }
+            return @"";
+        }
         /// GET api/default
         /// Must have Queryable attribute or OData does not work
         [Queryable]
         [HttpGet]
         [ActionName("SDataCollection")]
-        public virtual IQueryable<T> GetCollection(string select)
+        public virtual IQueryable<T> GetCollection(string select, string dataset)
         {
             IQueryable<T> retVal;
-            
+
+            var userToken = GetUserTokenFromRequest();
+            repository.SetTenantDataSet(dataset, userToken);
             if(string.IsNullOrEmpty(select))
             {
-                retVal = respository.GetAll();
+                retVal = repository.GetAll();
             }
             else
             {
-                retVal = respository.GetAll(select);
+                retVal = repository.GetAll(select);
             }
             
             if (retVal == null)
@@ -52,32 +67,34 @@ namespace SimpleSDataApiDemo.Controllers
         // GET api/product/5
         [HttpGet]
         [ActionName("SDataSingleResourceKind")]
-        public virtual T GetSingle(String selector)
+        public virtual T GetSingle(String selector, String dataset)
         {
-            return GetCollection("").FirstOrDefault(y => y.Id == selector);
+            return GetCollection("", dataset).FirstOrDefault(y => y.Id == selector);
         }
 
         // GET api/product/5
         [HttpGet]
         [ActionName("SDataSingleResourceKind")]
-        public virtual T GetSingle(String selector, String select)
+        public virtual T GetSingle(String selector, String select, String dataset)
         {
-            return GetCollection(select).FirstOrDefault(y => y.Id == selector);
+            return GetCollection(select, dataset).FirstOrDefault(y => y.Id == selector);
         }
 
         [HttpGet]
         [ActionName("GetTemplate")]
-        virtual public T GetTemplate()
+        virtual public T GetTemplate(String dataset)
         {
-            return respository.GetTemplate();
+            var userToken = GetUserTokenFromRequest();
+            repository.SetTenantDataSet(dataset, userToken);
+            return repository.GetTemplate();
         }
 
         // PUT api/customers/5
         [HttpPut]
         [ActionName("SDataSingleResourceKind")]
-        public HttpResponseMessage Put(String selector, String select, T value)
+        public HttpResponseMessage Put(String selector, String select, T value, String dataset)
         {
-            T resourceToModify = GetSingle(selector, select);
+            T resourceToModify = GetSingle(selector, select, dataset);
             
             T resourceModified;
 
@@ -87,7 +104,9 @@ namespace SimpleSDataApiDemo.Controllers
             }
             else
             {
-                resourceModified = respository.Put(selector, value);
+                var userToken = GetUserTokenFromRequest();
+                repository.SetTenantDataSet(dataset, userToken);
+                resourceModified = repository.Put(selector, value);
             }
 
             HttpStatusCode retStatus;
@@ -103,7 +122,7 @@ namespace SimpleSDataApiDemo.Controllers
             var response = Request.CreateResponse<T>(retStatus, resourceModified);
 
             // check for any errors from repository and reset status code and reason phrase
-            String tmpReason = respository.GetErrorText();
+            String tmpReason = repository.GetErrorText();
             if (tmpReason != null)
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
@@ -116,9 +135,11 @@ namespace SimpleSDataApiDemo.Controllers
         // POST single resource post; client sent single resource
         [HttpPost]
         [ActionName("SDataCollection")]
-        public HttpResponseMessage Post(T value)
+        public HttpResponseMessage Post(T value, String dataset)
         {
-            T addedResource = respository.Post(value);
+            var userToken = GetUserTokenFromRequest();
+            repository.SetTenantDataSet(dataset, userToken);
+            T addedResource = repository.Post(value);
             HttpStatusCode retStatus;
 
             if (addedResource == null)
@@ -134,7 +155,7 @@ namespace SimpleSDataApiDemo.Controllers
             var response = Request.CreateResponse<T>(retStatus, addedResource);
             
             // check for any errors from repository and reset status code and reason phrase
-            String tmpReason = respository.GetErrorText();
+            String tmpReason = repository.GetErrorText();
             if (tmpReason != null)
             {
                 response.ReasonPhrase = tmpReason; //this doesn't appear to do anything at least in firefox
@@ -162,8 +183,9 @@ namespace SimpleSDataApiDemo.Controllers
         }*/
 
         // DELETE api/customers/5
-        public void Delete(String selector)
+        public void Delete(String selector, String dataset)
         {
+            //TO-DO delete code
         }
 
     }

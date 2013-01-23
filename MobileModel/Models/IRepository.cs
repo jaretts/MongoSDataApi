@@ -19,5 +19,7 @@ namespace Mobile.Models
         T Put(String selector, T value);
 
         String GetErrorText();
+
+        void SetTenantDataSet(string dataset, string userToken);
     }
 }

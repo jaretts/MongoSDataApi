@@ -28,6 +28,9 @@ namespace Mobile.Models
         [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
         public String Id { get; set; }
 
+        [DataMember]
+        public String tenantID { get; set; }
+
         virtual public void InitializeDefaults() { }
 
     }
